@@ -1,6 +1,7 @@
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Board } from './Board';
+// import { useEffect } from 'react';
 
 export const App = () => {
   return (

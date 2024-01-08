@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { Box } from './Box';
 import { KING_POINTS } from './KING_POINTS';
 import { PAWN_POINTS } from './PAWN_POINTS';
@@ -10,6 +10,17 @@ import { ChessPiece } from './ChessPiece';
 import { BOARD_INDEX, AXIS_SIGN, COLORS, BLACK_INDEX, WHITE_INDEX } from './constants';
 
 export function Board() {
+  const { gl, camera, viewport } = useThree();
+  useEffect(() => {
+    const onWindowResize = () => {
+      viewport.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      gl.setSize(window.innerWidth, window.innerHeight);
+    };
+
+    window.addEventListener('resize', onWindowResize, false);
+    onWindowResize();
+  }, [camera, gl, viewport]);
   const ref = useRef<THREE.Group | null>(null);
   const [isRotating, setIsRotating] = useState<boolean>(false);
 
