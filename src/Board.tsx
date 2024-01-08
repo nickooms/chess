@@ -8,9 +8,14 @@ import { TOWER_POINTS } from './TOWER_POINTS';
 import { ROOK_POINTS } from './ROOK_POINTS.1';
 import { ChessPiece } from './ChessPiece';
 import { BOARD_INDEX, AXIS_SIGN, COLORS, BLACK_INDEX, WHITE_INDEX } from './constants';
+import { useControls } from 'leva';
 
 export function Board() {
   const { gl, camera, viewport } = useThree();
+  const ref = useRef<THREE.Group | null>(null);
+  const [isRotating, setIsRotating] = useState<boolean>(false);
+  const { rotate } = useControls({ rotate: { value: false, label: 'Rotate' } });
+
   useEffect(() => {
     const onWindowResize = () => {
       viewport.aspect = window.innerWidth / window.innerHeight;
@@ -21,8 +26,6 @@ export function Board() {
     window.addEventListener('resize', onWindowResize, false);
     onWindowResize();
   }, [camera, gl, viewport]);
-  const ref = useRef<THREE.Group | null>(null);
-  const [isRotating, setIsRotating] = useState<boolean>(false);
 
   useEffect(() => {
     const onKeyPress = (event: KeyboardEvent) => {
@@ -50,7 +53,7 @@ export function Board() {
   }, []);
 
   useFrame((_, delta) => {
-    if (isRotating) {
+    if (rotate /* isRotating */) {
       ref.current!.rotation.z += 0.5 * delta;
     }
   });
