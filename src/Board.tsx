@@ -14,7 +14,11 @@ export function Board() {
   const { gl, camera, viewport } = useThree();
   const ref = useRef<THREE.Group | null>(null);
   const [isRotating, setIsRotating] = useState<boolean>(false);
-  const { rotate } = useControls({ rotate: { value: false, label: 'Rotate' } });
+  const [isWireframe, setIsWireframe] = useState<boolean>(false);
+  const { rotate, wireframe } = useControls({
+    rotate: { value: isRotating, label: 'Rotate' },
+    wireframe: { value: isWireframe, label: 'Wireframe' },
+  });
 
   useEffect(() => {
     const onWindowResize = () => {
@@ -31,6 +35,10 @@ export function Board() {
     const onKeyPress = (event: KeyboardEvent) => {
       if (event.key === ' ') {
         setIsRotating((prev) => !prev);
+      }
+
+      if (event.key === 'w') {
+        setIsWireframe((prev) => !prev);
       }
 
       if (event.code === 'ArrowLeft') {
@@ -75,36 +83,42 @@ export function Board() {
         return (
           <>
             <ChessPiece
+              wireframe={wireframe}
               key={`${color}-tower-left`}
               position={[-3.5, y * 3.5, 0.1 - 1]}
               points={TOWER_POINTS}
               color={color}
             />
             <ChessPiece
+              wireframe={wireframe}
               key={`${color}-tower-right`}
               position={[3.5, y * 3.5, 0.1 - 1]}
               points={TOWER_POINTS}
               color={color}
             />
             <ChessPiece
+              wireframe={wireframe}
               key={`${color}-rook-left`}
               position={[-1.5, y * 3.5, 0.1 - 1]}
               points={ROOK_POINTS}
               color={color}
             />
             <ChessPiece
+              wireframe={wireframe}
               key={`${color}-rook-right`}
               position={[1.5, y * 3.5, 0.1 - 1]}
               points={ROOK_POINTS}
               color={color}
             />
             <ChessPiece
+              wireframe={wireframe}
               key={`${color}-queen`}
               position={[0.5, y * 3.5, 0.1 - 1]}
               points={QUEEN_POINTS}
               color={color}
             />
             <ChessPiece
+              wireframe={wireframe}
               key={`${color}-king`}
               position={[-0.5, y * 3.5, 0.1 - 1]}
               points={KING_POINTS}
@@ -112,6 +126,7 @@ export function Board() {
             />
             {BOARD_INDEX.map((x) => (
               <ChessPiece
+                wireframe={wireframe}
                 key={`pawn-${x}-${color}`}
                 position={[x - 3.5, y * 2.5, 0.1 - 1]}
                 points={PAWN_POINTS}

@@ -10,9 +10,9 @@ export const App = () => {
       {/* <axesHelper args={[8]} /> */}
       {/* <ambientLight intensity={0.3} /> */}
       {/* <pointLight position={[0, -6, 0]} intensity={15} /> */}
-      <spotLight position={[0, -5, 0]} intensity={20} color="white" />
-      <spotLight position={[-2, -5, -2]} intensity={20} color="red" />
-      <spotLight position={[2, -5, -2]} intensity={20} color="green" />
+      <spotLight position={[0, -5, 5]} intensity={20} color="white" />
+      <spotLight position={[-2, -5, 2]} intensity={20} color="red" />
+      <spotLight position={[2, -5, 2]} intensity={20} color="green" />
       <spotLight position={[-2, -5, 2]} intensity={20} color="blue" />
       <spotLight position={[2, -5, 2]} intensity={20} color="pink" />
       <Board />

@@ -7,10 +7,12 @@ export const ChessPiece = ({
   color,
   position,
   points,
+  wireframe = false,
 }: {
   color: 'black' | 'white';
   position: Vector3;
   points: Vector2[];
+  wireframe?: boolean;
 }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   return (
@@ -21,7 +23,7 @@ export const ChessPiece = ({
       onPointerOut={() => setIsHovered(false)}
     >
       <latheGeometry args={[points, 24]} />
-      <ChessMaterial color={isHovered ? 'hotpink' : color} />
+      <ChessMaterial color={isHovered ? 'hotpink' : color} wireframe={wireframe} />
     </mesh>
   );
 };
