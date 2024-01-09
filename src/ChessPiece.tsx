@@ -1,7 +1,9 @@
-import { useState } from 'react';
 import { Vector3 } from '@react-three/fiber';
 import { Vector2 } from 'three';
 import { ChessMaterial } from './ChessMaterial';
+import { animated, useSpring } from '@react-spring/three';
+
+const AnimatedChessMaterial = animated(ChessMaterial);
 
 export const ChessPiece = ({
   color,
@@ -9,21 +11,41 @@ export const ChessPiece = ({
   points,
   wireframe = false,
 }: {
-  color: 'black' | 'white';
+  color: string;
   position: Vector3;
   points: Vector2[];
   wireframe?: boolean;
 }) => {
-  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [springs, api] = useSpring(
+    () => ({
+      color,
+      config: (key) => {
+        switch (key) {
+          case 'scale':
+          case 'color':
+            return {
+              mass: 4,
+              friction: 10,
+              // tension: 200,
+            };
+          case 'position':
+            return { mass: 4, friction: 220 };
+          default:
+            return {};
+        }
+      },
+    }),
+    []
+  );
   return (
     <mesh
       position={position}
       rotation={[Math.PI / 2, 0, 0]}
-      onPointerOver={() => setIsHovered(true)}
-      onPointerOut={() => setIsHovered(false)}
+      onPointerOver={() => api.start({ color: 'hotpink' })}
+      onPointerOut={() => api.start({ color })}
     >
       <latheGeometry args={[points, 24]} />
-      <ChessMaterial color={isHovered ? 'hotpink' : color} wireframe={wireframe} />
+      <AnimatedChessMaterial color={springs.color} wireframe={wireframe} />
     </mesh>
   );
 };

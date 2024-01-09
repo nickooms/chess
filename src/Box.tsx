@@ -1,58 +1,41 @@
-import { FC, MutableRefObject, useRef, useState } from 'react';
+import { FC, MutableRefObject, useRef } from 'react';
 import { MeshProps } from '@react-three/fiber';
 import { BufferGeometry, Material, Mesh, NormalBufferAttributes } from 'three';
-import { ChessMaterial } from './ChessMaterial';
+import { useSpring, a } from '@react-spring/three';
 
 type MeshRef = Mesh<BufferGeometry<NormalBufferAttributes>, Material> | null;
 
 type Position = [x: number, y: number, z: number];
 
 interface BoxProps extends MeshProps {
-  color: 'black' | 'white';
-  active?: boolean;
+  color: 'black' | 'white' | string;
   position?: Position;
 }
 
-const [BOX_WIDTH, BOX_HEIGHT, BOX_DEPTH] = [1, 1, 0.1] as const;
-const COLOR = {
-  HOVERED: 'pink',
-  ACTIVE_HOVERED: 'hotpink',
-  ACTIVE: 'yellow',
-} as const;
-const DEFAULTS = {
-  ACTIVE: false,
-  POSITION: [0, 0, 0],
-} as const;
+const SIZE = [1, 1, 0.1];
+const [WIDTH, HEIGHT, DEPTH] = SIZE;
 
-export const Box: FC<BoxProps> = ({
-  active: defaultActive = DEFAULTS.ACTIVE,
-  position: [x, y, z] = DEFAULTS.POSITION,
-  ...props
-}) => {
+export const Box: FC<BoxProps> = ({ position: [x, y, z] = [0, 0, 0], color, ...props }) => {
   const meshRef: MutableRefObject<MeshRef> = useRef<MeshRef>(null);
-  const [active, setActive] = useState<boolean>(defaultActive);
-  const [hovered, setHover] = useState<boolean>(false);
-
-  const position: Position = [x + BOX_WIDTH / 2, y + BOX_HEIGHT / 2, z + BOX_DEPTH / 2];
-  const color = hovered
-    ? active
-      ? COLOR.ACTIVE_HOVERED
-      : COLOR.HOVERED
-    : active
-    ? COLOR.ACTIVE
-    : props.color;
+  const position: Position = [x + WIDTH / 2, y + HEIGHT / 2, z + DEPTH / 2];
+  const [springs, api] = useSpring(
+    () => ({
+      color,
+    }),
+    []
+  );
 
   return (
     <mesh
       {...props}
       ref={meshRef}
       position={position}
-      onClick={() => setActive(!active)}
-      onPointerOver={() => setHover(true)}
-      onPointerOut={() => setHover(false)}
+      onClick={() => api.start({ color: 'yellow' })}
+      // onPointerOver={() => api.start({ color: 'hotpink' })}
+      // onPointerOut={() => api.start({ color })}
     >
-      <boxGeometry args={[BOX_WIDTH, BOX_HEIGHT, BOX_DEPTH]} />
-      <ChessMaterial color={color} />
+      <boxGeometry args={[WIDTH, HEIGHT, DEPTH]} />
+      <a.meshPhysicalMaterial color={springs.color} />
       {props.children}
     </mesh>
   );
