@@ -1,16 +1,19 @@
-import { Vector3 } from '@react-three/fiber';
+import { Euler, Vector3 } from '@react-three/fiber';
 import { Vector2 } from 'three';
 import { ChessMaterial } from './ChessMaterial';
 import { animated, useSpring } from '@react-spring/three';
 
-const AnimatedChessMaterial = animated(ChessMaterial);
+const SECTIONS = 4;
 
-interface ChessPieceProps {
+const AnimatedChessMaterial = animated(ChessMaterial); 
+
+type ChessPieceProps = {
   color: string;
   position: Vector3;
   points: Vector2[];
   wireframe?: boolean;
 }
+
 
 export const ChessPiece = ({
   color,
@@ -41,15 +44,17 @@ export const ChessPiece = ({
     }),
     []
   );
-  
+
+  const rotation:Euler = [Math.PI / 2, 0, 0];
+
   return (
     <mesh
       position={position}
-      rotation={[Math.PI / 2, 0, 0]}
+      rotation={rotation}
       onPointerOver={() => api.start({ color: 'hotpink' })}
       onPointerOut={() => api.start({ color })}
     >
-      <latheGeometry args={[points, 24]} />
+      <latheGeometry args={[points, SECTIONS]} />
       <AnimatedChessMaterial color={springs.color} wireframe={wireframe} />
     </mesh>
   );
