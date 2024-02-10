@@ -5,17 +5,19 @@ import { animated, useSpring } from '@react-spring/three';
 
 const AnimatedChessMaterial = animated(ChessMaterial);
 
+interface ChessPieceProps {
+  color: string;
+  position: Vector3;
+  points: Vector2[];
+  wireframe?: boolean;
+}
+
 export const ChessPiece = ({
   color,
   position,
   points,
   wireframe = false,
-}: {
-  color: string;
-  position: Vector3;
-  points: Vector2[];
-  wireframe?: boolean;
-}) => {
+}: ChessPieceProps) => {
   const [springs, api] = useSpring(
     () => ({
       color,
@@ -28,8 +30,10 @@ export const ChessPiece = ({
               friction: 10,
               // tension: 200,
             };
+
           case 'position':
             return { mass: 4, friction: 220 };
+
           default:
             return {};
         }
@@ -37,6 +41,7 @@ export const ChessPiece = ({
     }),
     []
   );
+  
   return (
     <mesh
       position={position}
