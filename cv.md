@@ -99,7 +99,7 @@ publicly available data
 
 #### NMBS - ATMS
 
->Senior React Developer (Lead) `[04/2021 - 11/2023]`
+>Senior React Developer (Lead) `[04/2021 - 12/2023]`
 
 **ATMS** (**A**dvanced **T**rain **M**anagement **S**ystem) is the system built by the Belgian national railway company NMBS to view and manage all incidents and delays regarding public transport by train in `Belgium`.
 
